@@ -1,44 +1,18 @@
 #!/usr/bin/ruby
 require 'csv'
+require './array_extender.rb'
 
-module ArrayExtender
-	def avg
-		sum = 0.0
-		self.each do |i|
-			sum += i
-		end
-		sum / self.size		
-	end
-
-	def min
-		 m = -1.0
-		self.each do |i|
-			m = i if m == -1 || m > i
-		end
-		m
-	end
-
-	def max
-		 m = 0.0
-		self.each do |i|
-			m = i if m < i
-		end
-		m
-	end
-end
-class Array
-	include ArrayExtender
-end
-
-if ARGV.size < 5
-	puts "multi_netperf.rb [flows] [peer_fmt] [start_with] [increment_cnt] [duration]"
+if ARGV.size < 6
+	puts "multi_netperf.rb [flows] [peer_fmt] [start_with] [increment_cnt] [duration] [output_fmt]"
 	exit 1
 end
+
 flows = ARGV[0].to_i
 peer_fmt = ARGV[1]
 start_with = ARGV[2].to_i
 increment_cnt = ARGV[3].to_i
 duration = ARGV[4].to_i
+output_fmt = ARGV[5]
 
 v = start_with
 (0 ... flows).each do |i|
@@ -64,15 +38,24 @@ tps = []
 	File.delete(log.path)
 end
 
-puts "lat"
+log = File.new(sprintf(output_fmt, 'lat'), 'w')
 lat.each do |v|
-	puts v
+	log.write v, '\n'
 end
-puts "\ntps"
-tps.each do |v|
-	puts v
-end
-puts "\navg lat:#{lat.avg} tps:#{tps.avg}"
-puts "min lat:#{lat.min} tps:#{tps.min}"
-puts "max lat:#{lat.max} tps:#{tps.max}"
+log.close
 
+log = File.new(sprintf(output_fmt, 'tps'), 'w')
+tps.each do |v|
+	log.write v, '\n'
+end
+log.close
+
+log = File.new(sprintf(output_fmt, 'avg'), 'w')
+log.write "lat,tps\n#{lat.avg},#{tps.avg}\n"
+log.close
+log = File.new(sprintf(output_fmt, 'max'), 'w')
+log.write "lat,tps\n#{lat.max},#{tps.max}\n"
+log.close
+log = File.new(sprintf(output_fmt, 'min'), 'w')
+log.write "lat,tps\n#{lat.min},#{tps.min}\n"
+log.close

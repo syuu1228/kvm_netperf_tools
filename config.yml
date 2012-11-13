@@ -1,0 +1,31 @@
+vms:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+  - 32
+  - 64
+  - 128
+max_vms: 128
+flows:
+  - 128
+  - 64
+  - 32
+  - 8
+  - 4
+  - 2
+  - 1
+cpus:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 16
+duration: 180
+host_ip: 10.0.0.2
+sleep_for_vmstart: 360
+vm_ip_fmt: 10.0.0.%d
+vm_ip_start: 3
+eth0_mac_fmt: 52:54:00:95:df:%02x
+eth1_mac_fmt: 52:54:00:6b:28:%02x

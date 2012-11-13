@@ -1,39 +1,9 @@
 #!/usr/bin/ruby
+require 'yaml'
+require './array_extender.rb'
 
-module ArrayExtender
-	def avg
-		sum = 0.0
-		self.each do |i|
-			sum += i
-		end
-		sum / self.size		
-	end
-
-	def min
-		m = -1
-		self.each do |i|
-			m = i if m == -1 || m > i
-		end
-		m
-	end
-
-	def max
-		m = 0
-		self.each do |i|
-			m = i if m < i
-		end
-		m
-	end
-end
-class Array
-	include ArrayExtender
-end
-
-VMS = [1, 2, 4, 8, 16, 32, 64, 128]
-CPUS = [1, 2, 4, 8, 16]
+c = YAML.load_file("#{File.dirname(__FILE__)}}/config.yml")
 ENTRIES = 9
-DURATION = 180
-
 HEADER = ",%usr,%nice,%sys,%iowait,%irq,%soft,%steal,%guest,%idle\n"
 
 avg = File.new("mpstat_avg.csv", 'w')
@@ -42,8 +12,8 @@ min = File.new("mpstat_min.csv", 'w')
 min.write HEADER
 max = File.new("mpstat_max.csv", 'w')
 max.write HEADER
-CPUS.each do |cpu|
-	VMS.each do |v|
+c['cpus'].each do |cpu|
+	c['vms'].each do |v|
 		values = Array.new(ENTRIES)
 		values.each_index do |i|
 			values[i] = []
@@ -54,7 +24,7 @@ CPUS.each do |cpu|
 		log.gets
 		cnt = 0
 		log.each do |l|
-			break if cnt == DURATION
+			break if cnt == c['duration']
 			line = l.split
 			(2...line.size).each do |i|
 				values[i-2] << line[i].to_i
