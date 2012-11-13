@@ -2,7 +2,7 @@
 require 'yaml'
 require './array_extender.rb'
 
-c = YAML.load_file("#{File.dirname(__FILE__)}}/config.yml")
+c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 ENTRIES = 9
 HEADER = ",%usr,%nice,%sys,%iowait,%irq,%soft,%steal,%guest,%idle\n"
 

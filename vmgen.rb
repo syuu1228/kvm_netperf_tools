@@ -2,7 +2,7 @@
 require 'yaml'
 require 'erb'
 
-c = YAML.load_file("#{File.dirname(__FILE__)}}/config.yml")
+c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 
 c['cpus'].each do |cpu|
 	(0...c['max_vms']).each do |no|

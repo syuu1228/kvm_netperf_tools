@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 require 'yaml'
 
-c = YAML.load_file("#{File.dirname(__FILE__)}}/config.yml")
+c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 
 c['cpus'].each do |cpu|
 	(0...c['vms'].size).each do |i|
