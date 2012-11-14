@@ -12,7 +12,7 @@ if !ret
 end
 
 puts "start netperf"
-ret = system("#{File.dirname(__FILE__)}}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['host_ip_tail']} #{f} #{c['duration']} ~/netperf_%s.baremetal.log")
+ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{f} #{c['vm_ip_fmt']} #{c['host_ip_tail']} #{f} #{c['duration']} ~/netperf_%s.baremetal.log")
 if !ret
 	puts ret
 	exit 1

@@ -40,13 +40,13 @@ end
 
 log = File.new(sprintf(output_fmt, 'lat'), 'w')
 lat.each do |v|
-	log.write v, '\n'
+	log.write "#{v}\n"
 end
 log.close
 
 log = File.new(sprintf(output_fmt, 'tps'), 'w')
 tps.each do |v|
-	log.write v, '\n'
+	log.write "#{v}\n"
 end
 log.close
 
