@@ -7,13 +7,13 @@ c['cpus'].each do |cpu|
 	(0...c['vms'].size).each do |i|
 		v = c['vms'][i]
 		f = c['flows'][i]
-		puts "[#{v}-#{cpu}]"
+		puts "[#{v}-#{cpu}] flows:#{f}"
 		if !v
-			puts "v:#{v}"
+			puts "v is nil"
 			exit 1
 		end
 		if !f
-			puts "f:#{f}"
+			puts "f is nil"
 			exit 1
 		end
 		next if File.exists?(File.expand_path("~/netperf_lat.#{v}-#{cpu}.log"))
@@ -49,7 +49,6 @@ c['cpus'].each do |cpu|
 		end
 
 		puts "start netperf"
-		puts "#{File.dirname(__FILE__)}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{f} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log"
 		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{f} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
 		if !ret
 			puts ret
