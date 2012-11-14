@@ -30,3 +30,4 @@ vm_ip_start: 3
 host_ip_tail: 2
 eth0_mac_fmt: 52:54:00:95:df:%02x
 eth1_mac_fmt: 52:54:00:6b:28:%02x
+image_path: /home/syuu/images

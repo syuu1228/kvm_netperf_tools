@@ -9,6 +9,7 @@ c['cpus'].each do |cpu|
 		uuid = `uuidgen`
 		eth0_mac = sprintf(c['eth0_mac_fmt'], no)
 		eth1_mac = sprintf(c['eth1_mac_fmt'], no)
+		image_path = c['image_path']
 		erb = File.new("ubuntu.xml.erb")
 		xml = File.new("/etc/libvirt/qemu/ubuntu#{no}-#{cpu}.xml", "w")
 		xml.write(ERB.new(erb.read).result(binding))
