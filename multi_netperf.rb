@@ -18,7 +18,7 @@ v = start_with
 (0 ... flows).each do |i|
 	Process.fork do
 		peer = sprintf(peer_fmt, v)
-		exec "netperf -v2 -H #{peer} -t TCP_RR -P 0 -c -C -l #{duration} >> /tmp/netperf.log.#{i}"
+		exec "netperf -v2 -H #{peer} -t TCP_RR -P 0 -c -C -l #{duration} >> #{sprintf(output_fmt, "raw_#{i}")}"
 	end
 end
 ret = Process.waitall
@@ -26,7 +26,7 @@ lat = []
 tps = []
 
 (0 ... flows).each do |i|
-	log = CSV.open("/tmp/netperf.log.#{i}", mode = "r", options = {:col_sep => ' '})
+	log = CSV.open(sprintf(output_fmt, "raw_#{i}"), mode = "r", options = {:col_sep => ' '})
 	j = 0
 	log.each do |row|
 		if j == 5
@@ -35,7 +35,6 @@ tps = []
 		end
 		j += 1
 	end
-	File.delete(log.path)
 end
 
 log = File.new(sprintf(output_fmt, 'lat'), 'w')

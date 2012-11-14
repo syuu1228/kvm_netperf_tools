@@ -7,6 +7,7 @@ c['cpus'].each do |cpu|
 	(0...c['vms'].size).each do |i|
 		v = c['vms'][i]
 		f = c['flows'][i]
+		puts "[#{v}-#{cpu}]"
 		if !v
 			puts "v:#{v}"
 			exit 1
@@ -15,7 +16,7 @@ c['cpus'].each do |cpu|
 			puts "f:#{f}"
 			exit 1
 		end
-		next if File.exists?("~/netperf.#{v}-#{cpu}.log")
+		next if File.exists?(File.expand_path("~/netperf_lat.#{v}-#{cpu}.log"))
 
 		(0...v).each do |j|
 			puts "start vm#{j}-#{cpu}"
