@@ -34,7 +34,7 @@ c['cpus'].each do |cpu|
 		end
 
 		puts "start netperf"
-		ret = system("#{File.dirname(__FILE__)}}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{f} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
+		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{f} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
 		if !ret
 			puts ret
 			exit 1
