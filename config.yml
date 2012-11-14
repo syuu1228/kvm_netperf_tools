@@ -24,7 +24,7 @@ cpus:
   - 16
 duration: 180
 host_ip: 10.0.0.2
-sleep_for_vmstart: 360
+sleep_for_vmstart: 10
 vm_ip_fmt: 10.0.0.%d
 vm_ip_start: 3
 host_ip_tail: 2

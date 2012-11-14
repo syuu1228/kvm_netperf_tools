@@ -17,6 +17,12 @@ c['cpus'].each do |cpu|
 				exit 1
 			end
 		end
+		(0...v).each do |j|
+			puts "waiting to startup vm#{j}-#{cpu}"
+			while true do
+				break if system("ping -c1 #{sprintf(c['vm_ip_fmt'], c['vm_ip_start'] + j)}")
+			end
+		end
 		puts "sleep #{c['sleep_for_vmstart']}"
 		sleep c['sleep_for_vmstart']
 		puts "start kvm_stat_log"
