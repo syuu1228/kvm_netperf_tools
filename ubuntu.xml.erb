@@ -36,14 +36,14 @@ or other application using the libvirt API.
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
     </controller>
     <interface type='network'>
-      <mac address='<%= eth0_mac %>'/>
+      <mac address='<%= nic0_mac %>'/>
       <source network='default'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
     <interface type='direct'>
-      <mac address='<%= eth1_mac %>'/>
-      <source dev='eth1' mode='bridge'/>
+      <mac address='<%= nic1_mac %>'/>
+      <source dev='<%= nic1_dev %>' mode='vepa'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </interface>
