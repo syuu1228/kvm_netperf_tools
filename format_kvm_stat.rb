@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require 'yaml'
-require './array_extender.rb'
+require "#{File.dirname(__FILE__)}/array_extender.rb"
 
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 ENTRIES = 74
