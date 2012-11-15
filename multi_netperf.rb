@@ -3,18 +3,18 @@ require 'csv'
 require "#{File.dirname(__FILE__)}/array_extender.rb"
 
 if ARGV.size < 6
-	puts "multi_netperf.rb [flows] [peer_fmt] [start_with] [increment_cnt] [duration] [output_fmt]"
+	puts "multi_netperf.rb [total_flows] [peer_fmt] [start_with] [flow_per_node] [duration] [output_fmt]"
 	exit 1
 end
 
 flows = ARGV[0].to_i
 peer_fmt = ARGV[1]
 start_with = ARGV[2].to_i
-increment_cnt = ARGV[3].to_i
+flow_per_node = ARGV[3].to_i
 duration = ARGV[4].to_i
 output_fmt = ARGV[5]
 
-c = increment_cnt
+c = flow_per_node
 v = start_with
 (0 ... flows).each do |i|
 	Process.fork do
@@ -24,7 +24,7 @@ v = start_with
 	c -= 1
 	if c == 0
 		v +=1
-		c = increment_cnt
+		c = flow_per_node
 	end
 end
 ret = Process.waitall
