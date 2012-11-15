@@ -14,11 +14,17 @@ increment_cnt = ARGV[3].to_i
 duration = ARGV[4].to_i
 output_fmt = ARGV[5]
 
+c = increment_cnt
 v = start_with
 (0 ... flows).each do |i|
 	Process.fork do
 		peer = sprintf(peer_fmt, v)
 		exec "netperf -v2 -H #{peer} -t TCP_RR -P 0 -c -C -l #{duration} >> #{sprintf(output_fmt, "raw_#{i}")}"
+	end
+	c -= 1
+	if c == 0
+		v +=1
+		c = increment_cnt
 	end
 end
 ret = Process.waitall
