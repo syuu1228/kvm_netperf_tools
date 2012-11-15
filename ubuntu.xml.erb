@@ -8,8 +8,8 @@ or other application using the libvirt API.
 <domain type='kvm'>
   <name>ubuntu<%= no %>-<%= cpu %></name>
   <uuid><%= uuid %></uuid>
-  <memory unit='KiB'>1048576</memory>
-  <currentMemory unit='KiB'>1048576</currentMemory>
+  <memory unit='KiB'>524288</memory>
+  <currentMemory unit='KiB'>524288</currentMemory>
   <vcpu placement='static'><%= cpu %></vcpu>
   <os>
     <type arch='x86_64' machine='pc'>hvm</type>
