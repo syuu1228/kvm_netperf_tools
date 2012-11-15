@@ -13,20 +13,19 @@ c['cpus'].each do |cpu|
 			exit 1
 		end
 		next if File.exists?(File.expand_path("~/netperf_lat.#{v}-#{cpu}.log"))
+		puts "clear swap"
+		ret = system("ssh #{c['host_ip']} sudo swapoff -a")
+		if !ret
+			puts ret
+			exit 1
+		end
+		ret = system("ssh #{c['host_ip']} sudo swapon -a")
+		if !ret
+			puts ret
+			exit 1
+		end
 
 		(0...v).each do |j|
-			puts "clear swap"
-			ret = system("ssh #{c['host_ip']} sudo swapoff -a")
-			if !ret
-				puts ret
-				exit 1
-			end
-			ret = system("ssh #{c['host_ip']} sudo swapon -a")
-			if !ret
-				puts ret
-				exit 1
-			end
-
 			puts "start vm#{j}-#{cpu}"
 			ret = system("ssh #{c['host_ip']} sudo virsh start ubuntu#{j}-#{cpu}")
 			if !ret
