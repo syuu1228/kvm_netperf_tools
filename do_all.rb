@@ -6,14 +6,10 @@ c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 c['cpus'].each do |cpu|
 	(0...c['vms'].size).each do |i|
 		v = c['vms'][i]
-		f = c['flows'][i]
-		puts "[#{v}-#{cpu}] flows:#{f}"
+		flow_per_node = c['max_flows'] / v
+		puts "[#{v}-#{cpu}] flow_per_node:#{flow_per_node}"
 		if !v
 			puts "v is nil"
-			exit 1
-		end
-		if !f
-			puts "f is nil"
 			exit 1
 		end
 		next if File.exists?(File.expand_path("~/netperf_lat.#{v}-#{cpu}.log"))
@@ -56,7 +52,7 @@ c['cpus'].each do |cpu|
 		end
 
 		puts "start netperf"
-		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{v} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{f} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
+		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{c['max_flows']} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{flow_per_node} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
 		if !ret
 			puts ret
 			exit 1
