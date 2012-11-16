@@ -1,18 +1,19 @@
 #!/usr/bin/ruby
 require 'yaml'
 
+IF = ARGV[0]
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 
 c['cpus'].each do |cpu|
 	(0...c['vms'].size).each do |i|
 		v = c['vms'][i]
 		flow_per_node = c['max_flows'] / v
-		puts "[#{v}-#{cpu}] flow_per_node:#{flow_per_node}"
+		puts "[#{IF}#{v}-#{cpu}] flow_per_node:#{flow_per_node}"
 		if !v
 			puts "v is nil"
 			exit 1
 		end
-		next if File.exists?(File.expand_path("~/netperf_lat.#{v}-#{cpu}.log"))
+		next if File.exists?(File.expand_path("~/netperf_lat.#{IF}#{v}-#{cpu}.log"))
 		puts "clear swap"
 		ret = system("ssh #{c['host_ip']} sudo swapoff -a")
 		if !ret
@@ -26,51 +27,51 @@ c['cpus'].each do |cpu|
 		end
 
 		(0...v).each do |j|
-			puts "start vm#{j}-#{cpu}"
-			ret = system("ssh #{c['host_ip']} sudo virsh start ubuntu#{j}-#{cpu}")
+			puts "start #{IF}#{j}-#{cpu}"
+			ret = system("ssh #{c['host_ip']} sudo virsh start ubuntu_#{IF}#{j}-#{cpu}")
 			if !ret
 				puts ret
 				exit 1
 			end
 		end
 		(0...v).each do |j|
-			puts "waiting to startup vm#{j}-#{cpu}"
+			puts "waiting to startup #{IF}#{j}-#{cpu}"
 			while true do
-				break if system("ping -c1 #{sprintf(c['vm_ip_fmt'], c['vm_ip_start'] + j)}")
+				break if system("ping -c1 #{sprintf(c['vm_ip_fmt'], c["vm_ip_start_#{IF}"] + j)}")
 			end
 		end
 		puts "sleep #{c['sleep_for_vmstart']}"
 		sleep c['sleep_for_vmstart']
 		puts "start kvm_stat_log"
-		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/kvm_stat_log.sh #{v}-#{cpu}")
+		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/kvm_stat_log.sh #{IF}#{v}-#{cpu}")
 		if !ret
 			puts ret
 			exit 1
 		end
 
 		puts "start mpstat_log"
-		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/mpstat_log.sh #{v}-#{cpu}")
+		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/mpstat_log.sh #{IF}#{v}-#{cpu}")
 		if !ret
 			puts ret
 			exit 1
 		end
 
 		puts "start vmstat_log"
-		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/vmstat_log.sh #{v}-#{cpu}")
+		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/vmstat_log.sh #{IF}#{v}-#{cpu}")
 		if !ret
 			puts ret
 			exit 1
 		end
 
 		puts "start virt-top_log"
-		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/virt-top_log.sh #{v}-#{cpu}")
+		ret = system("ssh #{c['host_ip']} screen -dm ~/kvm_netperf_tools/virt-top_log.sh #{IF}#{v}-#{cpu}")
 		if !ret
 			puts ret
 			exit 1
 		end
 
 		puts "start netperf"
-		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{c['max_flows']} #{c['vm_ip_fmt']} #{c['vm_ip_start']} #{flow_per_node} #{c['duration']} ~/netperf_%s.#{v}-#{cpu}.log")
+		ret = system("#{File.dirname(__FILE__)}/multi_netperf.rb #{c['max_flows']} #{c['vm_ip_fmt']} #{c["vm_ip_start_#{IF}"]} #{flow_per_node} #{c['duration']} ~/netperf_%s.#{IF}#{v}-#{cpu}.log")
 		if !ret
 			puts ret
 			exit 1
@@ -106,7 +107,7 @@ c['cpus'].each do |cpu|
 
 		puts "start shutdown"
 		(0...v).each do |j|
-			ret = system("ssh #{c['host_ip']} sudo virsh shutdown ubuntu#{j}-#{cpu}")
+			ret = system("ssh #{c['host_ip']} sudo virsh shutdown ubuntu#{IF}#{j}-#{cpu}")
 			if !ret
 				puts ret
 				exit 1
