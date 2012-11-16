@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require 'csv'
-require "#{File.dirname(__FILE__)}/array_extender.rb"
+require "#{File.dirname(__FILE__)}/lib/array_extender.rb"
 
 if ARGV.size < 6
 	puts "multi_netperf.rb [total_flows] [peer_fmt] [start_with] [flow_per_node] [duration] [output_fmt]"

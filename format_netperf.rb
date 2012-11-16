@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 require 'yaml'
 require 'scanf'
-require "#{File.dirname(__FILE__)}/array_extender.rb"
+require "#{File.dirname(__FILE__)}/lib/array_extender.rb"
 
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 ENTRIES = 2
