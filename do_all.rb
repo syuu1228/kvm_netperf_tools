@@ -1,6 +1,11 @@
 #!/usr/bin/ruby
 require 'yaml'
 
+if ARGV.size < 1
+	puts "do_all.rb [interface]"
+	exit 1
+end
+
 IF = ARGV[0]
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 
