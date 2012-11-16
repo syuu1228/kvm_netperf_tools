@@ -117,7 +117,7 @@ c['cpus'].each do |cpu|
 
 		puts "start shutdown"
 		(0...v).each do |j|
-			ret = system("ssh #{c['host_ip']} sudo virsh shutdown ubuntu#{IF}#{j}-#{cpu}")
+			ret = system("ssh #{c['host_ip']} sudo virsh shutdown ubuntu_#{IF}#{j}-#{cpu}")
 			if !ret
 				puts ret
 				exit 1
