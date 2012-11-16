@@ -8,9 +8,7 @@ vfs = get_vfs(c['nic1_dev'])
 
 ['vtap', 'vf'].each do |interface|
 	c['cpus'].each do |cpu|
-		max = c['max_vms']
-		max = vfs.size if interface == 'vf' && max > vfs.size
-		(0...max).each do |no|
+		(0...c["max_vms_#{interface}"]).each do |no|
 			uuid = `uuidgen`
 			nic0_mac = sprintf(c['nic0_mac_fmt'], no)
 			if interface  == 'vtap'

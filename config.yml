@@ -6,7 +6,8 @@ vms:
   - 16
   - 32
   - 64
-max_vms: 64
+max_vms_vtap: 64
+max_vms_vf: 63
 max_flows: 128
 cpus:
   - 1
