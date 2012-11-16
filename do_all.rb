@@ -14,7 +14,7 @@ c['cpus'].each do |cpu|
 		v = c['vms'][i]
 		max_flows = c['max_flows']
 		flow_per_node = max_flows / v
-		if v < c["max_vms_#{IF}"]
+		if v > c["max_vms_#{IF}"]
 			v = c["max_vms_#{IF}"]
 			max_flows = v * flow_per_node
 		end
