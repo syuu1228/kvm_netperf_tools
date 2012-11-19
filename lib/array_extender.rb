@@ -23,6 +23,12 @@ module ArrayExtender
 		m
 	end
 
+	def bias
+		bias_min = 1 - (min() / avg())
+		bias_max = (max() / avg()) - 1
+		(bias_min + bias_max) * 100
+	end
+
 	def twodim_sum_avg
 		sum = 0
 		self.each_index do |i|

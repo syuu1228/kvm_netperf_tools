@@ -9,9 +9,11 @@ end
 
 IF = ARGV[0]
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
-ENTRIES = 5
-HEADER = ",cpu_ns,net_rxby,net_txby,net\n"
+ENTRIES = 6
+HEADER = ",cpu_ns,cpu_percent,net_rxby,net_txby,net\n"
 
+all = File.new("virt-top_#{IF}_all.csv", 'w')
+all.write "," + HEADER
 sum = File.new("virt-top_#{IF}_sum.csv", 'w')
 sum.write HEADER
 avg = File.new("virt-top_#{IF}_avg.csv", 'w')
@@ -25,11 +27,13 @@ bias.write HEADER
 c['cpus'].each do |cpu|
 	c['vms'].each do |v|
 		cpu_ns = []
+		cpu_percent = []
 		net_rxby = []
 		net_txby = []
 		
 		(0...v).each do |i|
 			cpu_ns[i] = []
+			cpu_percent[i] = []
 			net_rxby[i] = []
 			net_txby[i] = []
 		end
@@ -42,6 +46,7 @@ c['cpus'].each do |cpu|
 			n = 0
 			while i < line.size
 				cpu_ns[n] << line[i+2].to_i
+				cpu_percent[n] << line[i+3].to_i
 				net_rxby[n] << line[i+8].to_i
 				net_txby[n] << line[i+9].to_i
 				i += 10
@@ -49,11 +54,15 @@ c['cpus'].each do |cpu|
 			end
 		end
 
-		sum.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_sum_avg},#{net_rxby.twodim_sum_avg},#{net_txby.twodim_sum_avg},#{net_rxby.twodim_sum_avg + net_txby.twodim_sum_avg}\n"
-		avg.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_avg_avg},#{net_rxby.twodim_avg_avg},#{net_txby.twodim_avg_avg},#{net_rxby.twodim_avg_avg + net_txby.twodim_avg_avg}\n"
-		max.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_max_avg},#{net_rxby.twodim_max_avg},#{net_txby.twodim_max_avg},#{net_rxby.twodim_max_avg + net_txby.twodim_max_avg}\n"
-		min.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_min_avg},#{net_rxby.twodim_min_avg},#{net_txby.twodim_min_avg},#{net_rxby.twodim_min_avg + net_txby.twodim_min_avg}\n"
-		bias.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_bias_avg},#{net_rxby.twodim_bias_avg},#{net_txby.twodim_bias_avg},#{net_rxby.twodim_bias_avg + net_txby.twodim_bias_avg}\n"
+		(0...v).each do |i|
+			all.write "#{IF}#{v}-cpu#{cpu},#{v},#{cpu_ns[i].avg},#{cpu_percent[i].avg},#{net_rxby[i].avg},#{net_txby[i].avg},#{net_rxby[i].avg + net_txby[i].avg}\n"
+		end
+
+		sum.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_sum_avg},#{cpu_percent.twodim_sum_avg},#{net_rxby.twodim_sum_avg},#{net_txby.twodim_sum_avg},#{net_rxby.twodim_sum_avg + net_txby.twodim_sum_avg}\n"
+		avg.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_avg_avg},#{cpu_percent.twodim_avg_avg},#{net_rxby.twodim_avg_avg},#{net_txby.twodim_avg_avg},#{net_rxby.twodim_avg_avg + net_txby.twodim_avg_avg}\n"
+		max.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_max_avg},#{cpu_percent.twodim_max_avg},#{net_rxby.twodim_max_avg},#{net_txby.twodim_max_avg},#{net_rxby.twodim_max_avg + net_txby.twodim_max_avg}\n"
+		min.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_min_avg},#{cpu_percent.twodim_min_avg},#{net_rxby.twodim_min_avg},#{net_txby.twodim_min_avg},#{net_rxby.twodim_min_avg + net_txby.twodim_min_avg}\n"
+		bias.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_bias_avg},#{cpu_percent.twodim_bias_avg},#{net_rxby.twodim_bias_avg},#{net_txby.twodim_bias_avg},#{net_rxby.twodim_bias_avg + net_txby.twodim_bias_avg}\n"
 	end
 end
 sum.close
