@@ -33,7 +33,7 @@ c['cpus'].each do |cpu|
 			break if cnt == c['duration']
 			line = l.split
 			(0...values.size).each do |i|
-				values[i] << line[i+2].to_i
+				values[i] << line[i+2].to_f
 			end
 			cnt+=1
 		end
