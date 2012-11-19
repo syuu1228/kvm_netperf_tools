@@ -23,5 +23,5 @@ vm_ip_start_vf: 100
 host_ip_tail: 2
 nic0_mac_fmt: 52:54:00:95:df:%02x
 nic1_mac_fmt: 52:54:00:6b:28:%02x
-nic1_dev: eth1
+nic1_dev: p2p1
 image_path: /home/syuu/images

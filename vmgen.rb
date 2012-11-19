@@ -3,10 +3,13 @@ require 'yaml'
 require 'erb'
 require "#{File.dirname(__FILE__)}/lib/vf.rb"
 
+interfaces = []
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
+interfaces << 'vtap'
 vfs = get_vfs(c['nic1_dev'])
+interfaces << 'vf' if vfs.size > 0
 
-['vtap', 'vf'].each do |interface|
+interfaces.each do |interface|
 	c['cpus'].each do |cpu|
 		(0...c["max_vms_#{interface}"]).each do |no|
 			uuid = `uuidgen`
