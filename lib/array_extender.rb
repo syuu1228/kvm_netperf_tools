@@ -60,6 +60,14 @@ module ArrayExtender
 	def twodim_bias_avg
 		self.twodim_max_avg - self.twodim_min_avg
 	end
+
+	def twodim_nbias_avg
+		a = []
+		self.each_index do |i|
+			a << self[i].avg
+		end
+		a.bias
+	end
 end
 class Array
 	include ArrayExtender

@@ -24,6 +24,8 @@ min = File.new("virt-top_#{IF}_min.csv", 'w')
 min.write HEADER
 bias = File.new("virt-top_#{IF}_bias.csv", 'w')
 bias.write HEADER
+nbias = File.new("virt-top_#{IF}_nbias.csv", 'w')
+nbias.write HEADER
 c['cpus'].each do |cpu|
 	c['vms'].each do |v|
 		cpu_ns = []
@@ -63,6 +65,7 @@ c['cpus'].each do |cpu|
 		max.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_max_avg},#{cpu_percent.twodim_max_avg},#{net_rxby.twodim_max_avg},#{net_txby.twodim_max_avg},#{net_rxby.twodim_max_avg + net_txby.twodim_max_avg}\n"
 		min.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_min_avg},#{cpu_percent.twodim_min_avg},#{net_rxby.twodim_min_avg},#{net_txby.twodim_min_avg},#{net_rxby.twodim_min_avg + net_txby.twodim_min_avg}\n"
 		bias.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_bias_avg},#{cpu_percent.twodim_bias_avg},#{net_rxby.twodim_bias_avg},#{net_txby.twodim_bias_avg},#{net_rxby.twodim_bias_avg + net_txby.twodim_bias_avg}\n"
+		nbias.write "#{IF}#{v}-cpu#{cpu},#{cpu_ns.twodim_nbias_avg},#{cpu_percent.twodim_nbias_avg},#{net_rxby.twodim_nbias_avg},#{net_txby.twodim_nbias_avg},#{net_rxby.twodim_nbias_avg + net_txby.twodim_nbias_avg}\n"
 	end
 end
 sum.close
