@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 require 'yaml'
 
-cpu = 16
+cpu = 1
 IF = 'vtap'
 c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 		v = 16
@@ -36,7 +36,7 @@ c = YAML.load_file("#{File.dirname(__FILE__)}/config.yml")
 		end
 
 		puts "start cg_test1"
-		ret = system("ssh #{c['host_ip']} ~/kvm_netperf_tools/cg_test1.rb")
+		ret = system("ssh #{c['host_ip']} sudo ~/kvm_netperf_tools/cg_test1.rb")
 		if !ret
 			puts ret
 			exit 1
